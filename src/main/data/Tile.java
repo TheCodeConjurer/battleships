@@ -11,24 +11,28 @@ public class Tile {
         this.state = NONE;
     }
 
-    public boolean shot(){
+    /**
+     * shoot this tile
+     * @return if shot is successful
+     */
+    public String shoot(){
         if (this.isHit){
-            return false;
+            return null;
         }
         this.isHit = true;
-        this.state = this.state == BOAT ? HIT:MISS;
-        return true;
-    }
-
-    public String getChar(){
-        return state.value;
-    }
-
-    public void setState(TileState state) {
-        this.state = state;
+        if (this.state == BOAT){
+            this.state = HIT;
+            return "Hit!";
+        }
+        this.state = MISS;
+        return "Missed";
     }
 
     public TileState getState() {
         return this.state;
+    }
+
+    public void setState(TileState state) {
+        this.state = state;
     }
 }

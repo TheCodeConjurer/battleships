@@ -1,18 +1,17 @@
 package main.data;
 
-import main.Util;
 
-import java.awt.*;
-import java.util.Locale;
+import java.awt.Point;
 
 public class Grid {
 
     private Tile[][] grid;
-    private boolean hidden;
-
-    public Grid(boolean hidden) {
-        this.hidden = hidden;
-        Tile[][] tempGrid = new Tile[10][10];
+    private final int gridSize = 10;
+    /**
+     * constructor
+     */
+    public Grid() {
+        Tile[][] tempGrid = new Tile[gridSize][gridSize];
         for (int x = 0; x < tempGrid.length; x++) {
             for (int y = 0; y < tempGrid.length; y++) {
                 tempGrid[y][x] = new Tile();
@@ -21,44 +20,49 @@ public class Grid {
         this.grid = tempGrid;
     }
 
-    public Tile[][] getGrid(){
-        return this.grid;
+    public String shoot(Point p) {
+       return grid[p.y][p.x].shoot();
     }
 
-    public boolean shoot(Point p) {
-       return grid[p.y][p.x].shot();
-    }
-
-    public boolean addBoat(String location, String orientation, Boat boat) {
-        Point p = Util.translateCoordinates(location);
-        if (p != null){
+        /**
+         * add a boat at the location specified
+         * return true if it can be placed
+         * @param location location on the grid
+         * @param orientation horizontal or vertical
+         * @param boat what type of boat
+         * @return if placed successfully
+         */
+    public boolean addBoat(Point location, String orientation, Boat boat) {
+        if (location != null){
             if (orientation.equalsIgnoreCase("h")){
                 //validate
-                if (p.x + boat.length > 10){
+                if (location.x + boat.length > gridSize){
                     return false;
                 }
                 for (int i = 0; i < boat.length; i++) {
-                    if (grid[p.y][p.x + i].getState() == TileState.BOAT){
+                    if (grid[location.y][location.x + i].getState() == TileState.BOAT){
                         return false;
                     };
                 }
+
                 // place boat
                 for (int i = 0; i < boat.length; i++) {
-                    grid[p.y][p.x + i].setState(TileState.BOAT);
+                    grid[location.y][location.x + i].setState(TileState.BOAT);
                 }
             } else {
                 //validate
-                if (p.y + boat.length > 10){
+                if (location.y + boat.length > gridSize){
                     return false;
                 }
                 for (int i = 0; i < boat.length; i++) {
-                    if (grid[p.y + i][p.x].getState() == TileState.BOAT){
+                    if (grid[location.y + i][location.x].getState() == TileState.BOAT){
                         return false;
                     };
                 }
+
                 // place boat
                 for (int i = 0; i < boat.length; i++) {
-                    grid[p.y + i][p.x].setState(TileState.BOAT);
+                    grid[location.y + i][location.x].setState(TileState.BOAT);
                 }
             }
             return true;
@@ -66,6 +70,9 @@ public class Grid {
         return false;
     }
 
+    /**
+     * checks if all the boats on this grid are sunk
+     */
     public boolean allSunk() {
         for (Tile[] tiles : grid){
             for (Tile tile : tiles){
@@ -77,7 +84,7 @@ public class Grid {
         return true;
     }
 
-    public boolean isHidden() {
-        return hidden;
+    public Tile[][] getGrid() {
+        return grid;
     }
 }
