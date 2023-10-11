@@ -5,41 +5,46 @@ import main.data.Ship;
 import main.data.Tile;
 import main.data.TileState;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static main.Util.*;
+import static main.Util.addShip;
+import static main.Util.shootGrid;
 
 public class Menu {
 
     Grid grid;
 
-    public void init(){
+    public void init() {
         this.grid = new Grid();
         displayMenu();
     }
 
-    private void displayMenu(){
+    private void displayMenu() {
         drawGrid();
         System.out.println("1. Add boat");
         System.out.println("2. Shoot");
         System.out.println("3. Check win");
         System.out.println("4. Reset grid");
-        switch (getUserInputNumber(4)){
-            case 1:{
+        switch (getUserInputNumber(4)) {
+            case 1: {
                 addBoat();
                 break;
             }
-            case 2:{
+            case 2: {
                 shoot();
                 break;
             }
-            case 3:{
+            case 3: {
                 checkWin();
                 break;
             }
-            case 4:{
+            case 4: {
                 init();
                 break;
+            }
+            default: {
+                displayMenu();
             }
         }
     }
@@ -65,20 +70,25 @@ public class Menu {
         String name = getUserInputString();
         System.out.println("Orientation vertical (v) or horizontal (h)");
         String orientation = getUserInputString();
-        if (!addShip(this.grid,coordinates,orientation,new Ship(name,length))){
+        if (!addShip(this.grid, coordinates, orientation, new Ship(name, length))) {
             System.out.println("can't put a ship there");
         }
         displayMenu();
     }
 
     private int getUserInputNumber(int limit) {
+        int number = 0;
         Scanner input = new Scanner(System.in);
-        int number = input.nextInt();
-        while (number < 0 || number > limit) {
-            System.out.print("invalid, try again:  ");
+        try {
             number = input.nextInt();
+            while (number < 0 || number > limit) {
+                System.out.print("invalid, try again:  ");
+                number = input.nextInt();
+            }
+        } catch (InputMismatchException e) {
         }
         return number;
+
     }
 
     private String getUserInputString() {
@@ -93,7 +103,7 @@ public class Menu {
             String line = drawNumber(i);
             for (Tile tile : this.grid.getTiles()[i]) {
                 TileState state = tile.getState();
-                    line = line.concat(state.value);
+                line = line.concat(state.value);
             }
             System.out.println(line);
         }
