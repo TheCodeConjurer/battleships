@@ -2,8 +2,14 @@ package main;
 
 import main.data.Boat;
 import main.data.Grid;
+import main.data.Tile;
+import main.data.TileState;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import static main.data.TileState.BOAT;
+import static main.data.TileState.NONE;
 
 public class Menu {
 
@@ -15,7 +21,7 @@ public class Menu {
     }
 
     private void displayMenu(){
-        renderGrid();
+        drawGrid();
         System.out.println("1. Add boat");
         System.out.println("2. Shoot");
         System.out.println("3. Check win");
@@ -38,9 +44,6 @@ public class Menu {
                 break;
             }
         }
-    }
-
-    private void renderGrid() {
     }
 
     private void resetGrid() {
@@ -67,14 +70,16 @@ public class Menu {
         String coordinates = getUserInputString();
         System.out.println("Orientation vertical (v) or horizontal (h)");
         String orientation = getUserInputString();
-        Util.addShip(this.grid,coordinates,orientation,length);
+        if (!Util.addShip(this.grid,coordinates,orientation,length)){
+            System.out.println("can't put a ship there");
+        }
         displayMenu();
     }
 
     private int getUserInputNumber(int limit) {
         Scanner input = new Scanner(System.in);
         int number = input.nextInt();
-        while (number > 0 && number < limit) {
+        while (number < 0 || number > limit) {
             System.out.print("invalid, try again:  ");
             number = input.nextInt();
         }
@@ -85,4 +90,26 @@ public class Menu {
         Scanner input = new Scanner(System.in);
         return input.nextLine();
     }
+
+    private void drawGrid() {
+        System.out.println();
+        System.out.println("   ABCDEFGHIJ");
+        for (int i = 0; i < 10; i++) {
+            String line = drawNumber(i);
+            for (Tile tile : this.grid.getGrid()[i]) {
+                TileState state = tile.getState();
+                    line = line.concat(state.value);
+            }
+            System.out.println(line);
+        }
+    }
+
+    private String drawNumber(int i) {
+        i++;
+        if (i < 10) {
+            return i + " |";
+        }
+        return i + "|";
+    }
+
 }

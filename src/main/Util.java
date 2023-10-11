@@ -41,7 +41,7 @@ public class Util {
     }
 
     public static boolean addShip(Grid grid, String coordinates,String orientation, int length){
-        if (orientation.matches("[vVhH]]")) {
+        if (orientation.matches("[vVhH]")) {
             Point p = translateCoordinates(coordinates);
             if (p != null) {
                 return grid.addBoat(p, orientation, length);
