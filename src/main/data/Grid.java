@@ -29,39 +29,39 @@ public class Grid {
          * return true if it can be placed
          * @param location location on the grid
          * @param orientation horizontal or vertical
-         * @param boat what type of boat
+         * @param length how long the boat is
          * @return if placed successfully
          */
-    public boolean addBoat(Point location, String orientation, Boat boat) {
+    public boolean addBoat(Point location, String orientation, int length) {
         if (location != null){
             if (orientation.equalsIgnoreCase("h")){
                 //validate
-                if (location.x + boat.length > gridSize){
+                if (location.x + length > gridSize){
                     return false;
                 }
-                for (int i = 0; i < boat.length; i++) {
+                for (int i = 0; i < length; i++) {
                     if (grid[location.y][location.x + i].getState() == TileState.BOAT){
                         return false;
                     };
                 }
 
                 // place boat
-                for (int i = 0; i < boat.length; i++) {
+                for (int i = 0; i < length; i++) {
                     grid[location.y][location.x + i].setState(TileState.BOAT);
                 }
             } else {
                 //validate
-                if (location.y + boat.length > gridSize){
+                if (location.y + length > gridSize){
                     return false;
                 }
-                for (int i = 0; i < boat.length; i++) {
+                for (int i = 0; i < length; i++) {
                     if (grid[location.y + i][location.x].getState() == TileState.BOAT){
                         return false;
                     };
                 }
 
                 // place boat
-                for (int i = 0; i < boat.length; i++) {
+                for (int i = 0; i < length; i++) {
                     grid[location.y + i][location.x].setState(TileState.BOAT);
                 }
             }

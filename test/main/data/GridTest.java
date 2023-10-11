@@ -18,7 +18,7 @@ public class GridTest extends TestCase {
 
     public void testAddBoat(){
         Grid grid = new Grid();
-        Assert.assertTrue(grid.addBoat(new Point(0,0),"h", Boat.AIRCRAFT_CARRIER));
+        Assert.assertTrue(grid.addBoat(new Point(0,0),"h", 4));
         Assert.assertEquals(TileState.BOAT,grid.getGrid()[0][0].getState());
         Assert.assertEquals(TileState.BOAT,grid.getGrid()[0][1].getState());
         Assert.assertEquals(TileState.BOAT,grid.getGrid()[0][2].getState());
@@ -32,7 +32,7 @@ public class GridTest extends TestCase {
 
     public void testAddBoatInvalid(){
         Grid grid = new Grid();
-        Assert.assertFalse(grid.addBoat(new Point(9,9),"h", Boat.AIRCRAFT_CARRIER));
+        Assert.assertFalse(grid.addBoat(new Point(9,9),"h", 4));
         Assert.assertEquals(TileState.NONE,grid.getGrid()[9][9].getState());
     }
 

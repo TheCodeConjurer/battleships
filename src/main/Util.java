@@ -40,11 +40,11 @@ public class Util {
         return "Invalid target";
     }
 
-    public static boolean addShip(Grid grid, String coordinates,String orientation, Boat boat){
+    public static boolean addShip(Grid grid, String coordinates,String orientation, int length){
         if (orientation.matches("[vVhH]]")) {
             Point p = translateCoordinates(coordinates);
             if (p != null) {
-                return grid.addBoat(p, orientation, boat);
+                return grid.addBoat(p, orientation, length);
             }
         }
         return false;
