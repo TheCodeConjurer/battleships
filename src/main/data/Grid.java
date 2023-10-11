@@ -1,12 +1,12 @@
 package main.data;
 
-
-import java.awt.Point;
+import java.awt.*;
 
 public class Grid {
 
-    private Tile[][] grid;
-    private final int gridSize = 10;
+    private Tile[][] tiles;
+    private static final int gridSize = 10;
+
     /**
      * constructor
      */
@@ -17,52 +17,50 @@ public class Grid {
                 tempGrid[y][x] = new Tile();
             }
         }
-        this.grid = tempGrid;
+        this.tiles = tempGrid;
     }
 
     public String shoot(Point p) {
-       return grid[p.y][p.x].shoot();
+        return this.tiles[p.y][p.x].shoot();
     }
 
-        /**
-         * add a boat at the location specified
-         * return true if it can be placed
-         * @param location location on the grid
-         * @param orientation horizontal or vertical
-         * @param length how long the boat is
-         * @return if placed successfully
-         */
-    public boolean addBoat(Point location, String orientation, int length) {
-        if (location != null){
-            if (orientation.equalsIgnoreCase("h")){
+    /**
+     * add a boat at the location specified
+     * return true if it can be placed
+     *
+     * @param location    location on the grid
+     * @param orientation horizontal or vertical
+     * @param ship        the ship
+     * @return if placed successfully
+     */
+    public boolean addBoat(Point location, String orientation, Ship ship) {
+        int length = ship.getLength();
+        if (location != null) {
+            if (orientation.equalsIgnoreCase("h")) {
                 //validate
-                if (location.x + length > gridSize){
+                if (location.x + length > gridSize) {
                     return false;
                 }
-                for (int i = 0; i < length; i++) {
-                    if (grid[location.y][location.x + i].getState() == TileState.BOAT){
-                        return false;
-                    };
+                if (this.tiles[location.y][location.x + length].getState() == TileState.BOAT) {
+                    return false;
                 }
 
                 // place boat
                 for (int i = 0; i < length; i++) {
-                    grid[location.y][location.x + i].setState(TileState.BOAT);
+                    assignShip(this.tiles[location.y][location.x + i], ship);
                 }
             } else {
                 //validate
-                if (location.y + length > gridSize){
+                if (location.y + length > gridSize) {
                     return false;
                 }
-                for (int i = 0; i < length; i++) {
-                    if (grid[location.y + i][location.x].getState() == TileState.BOAT){
-                        return false;
-                    };
+                if (this.tiles[location.y + length][location.x].getState() == TileState.BOAT) {
+                    return false;
                 }
 
                 // place boat
                 for (int i = 0; i < length; i++) {
-                    grid[location.y + i][location.x].setState(TileState.BOAT);
+                    assignShip(this.tiles[location.y + i][location.x], ship);
                 }
             }
             return true;
@@ -70,13 +68,19 @@ public class Grid {
         return false;
     }
 
+    public void assignShip(Tile t, Ship ship) {
+        t.setShip(ship);
+        t.setState(TileState.BOAT);
+        ship.addTile(t);
+    }
+
     /**
      * checks if all the boats on this grid are sunk
      */
     public boolean allSunk() {
-        for (Tile[] tiles : grid){
-            for (Tile tile : tiles){
-                if (tile.getState() == TileState.BOAT){
+        for (Tile[] tileArray : this.tiles) {
+            for (Tile tile : tileArray) {
+                if (tile.getState() == TileState.BOAT) {
                     return false;
                 }
             }
@@ -84,7 +88,7 @@ public class Grid {
         return true;
     }
 
-    public Tile[][] getGrid() {
-        return grid;
+    public Tile[][] getTiles() {
+        return this.tiles;
     }
 }

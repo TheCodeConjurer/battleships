@@ -1,7 +1,7 @@
 package main;
 
-import main.data.Boat;
 import main.data.Grid;
+import main.data.Ship;
 
 import java.awt.*;
 
@@ -40,11 +40,11 @@ public class Util {
         return "Invalid target";
     }
 
-    public static boolean addShip(Grid grid, String coordinates,String orientation, int length){
+    public static boolean addShip(Grid grid, String coordinates,String orientation, Ship ship){
         if (orientation.matches("[vVhH]")) {
             Point p = translateCoordinates(coordinates);
             if (p != null) {
-                return grid.addBoat(p, orientation, length);
+                return grid.addBoat(p, orientation, ship);
             }
         }
         return false;

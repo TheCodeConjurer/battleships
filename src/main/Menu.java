@@ -1,15 +1,13 @@
 package main;
 
-import main.data.Boat;
 import main.data.Grid;
+import main.data.Ship;
 import main.data.Tile;
 import main.data.TileState;
 
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static main.data.TileState.BOAT;
-import static main.data.TileState.NONE;
+import static main.Util.*;
 
 public class Menu {
 
@@ -40,15 +38,10 @@ public class Menu {
                 break;
             }
             case 4:{
-                resetGrid();
+                init();
                 break;
             }
         }
-    }
-
-    private void resetGrid() {
-        this.grid = new Grid();
-        displayMenu();
     }
 
     private void checkWin() {
@@ -59,7 +52,7 @@ public class Menu {
     private void shoot() {
         System.out.println("enter target:");
         String coordinates = getUserInputString();
-        System.out.println(Util.shootGrid(this.grid, coordinates));
+        System.out.println(shootGrid(this.grid, coordinates));
         displayMenu();
     }
 
@@ -68,9 +61,11 @@ public class Menu {
         int length = getUserInputNumber(4);
         System.out.println("Boat location?");
         String coordinates = getUserInputString();
+        System.out.println("Boat name");
+        String name = getUserInputString();
         System.out.println("Orientation vertical (v) or horizontal (h)");
         String orientation = getUserInputString();
-        if (!Util.addShip(this.grid,coordinates,orientation,length)){
+        if (!addShip(this.grid,coordinates,orientation,new Ship(name,length))){
             System.out.println("can't put a ship there");
         }
         displayMenu();
@@ -96,7 +91,7 @@ public class Menu {
         System.out.println("   ABCDEFGHIJ");
         for (int i = 0; i < 10; i++) {
             String line = drawNumber(i);
-            for (Tile tile : this.grid.getGrid()[i]) {
+            for (Tile tile : this.grid.getTiles()[i]) {
                 TileState state = tile.getState();
                     line = line.concat(state.value);
             }

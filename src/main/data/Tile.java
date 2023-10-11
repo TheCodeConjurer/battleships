@@ -6,6 +6,7 @@ public class Tile {
 
     private TileState state;
     private boolean isHit;
+    private Ship ship;
 
     public Tile() {
         this.state = NONE;
@@ -20,8 +21,12 @@ public class Tile {
             return null;
         }
         this.isHit = true;
-        if (this.state == BOAT){
+        if (this.ship != null){
             this.state = HIT;
+            boolean destroyed = this.ship.isDestroyed();
+            if (destroyed){
+                return "You destroyed the ".concat(this.ship.getName());
+            }
             return "Hit!";
         }
         this.state = MISS;
@@ -34,5 +39,9 @@ public class Tile {
 
     public void setState(TileState state) {
         this.state = state;
+    }
+
+    public void setShip(Ship ship) {
+        this.ship = ship;
     }
 }
